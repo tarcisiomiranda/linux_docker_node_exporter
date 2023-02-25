@@ -1,0 +1,20 @@
+FROM alpine:3.17
+
+# install packages
+RUN apk update && \
+apk add curl
+
+# Install node_exporter
+ENV NODE_VERSION=node_exporter-1.5.0.linux-amd64
+RUN addgroup -S appgroup && adduser -S prometheus -G appgroup
+# TODO add group prometheus above
+RUN mkdir -p /opt/prometheus/node_exporter/
+
+# download new version
+RUN curl -sSL https://github.com/prometheus/node_exporter/releases/download/v1.5.0/${NODE_VERSION}.tar.gz | tar xfz - -C /tmp
+RUN cp /tmp/${NODE_VERSION}/node_exporter /opt/prometheus/node_exporter/
+RUN chown prometheus /opt/prometheus/node_exporter/node_exporter
+
+EXPOSE 9109
+# run node_exporter
+ENTRYPOINT ["/opt/prometheus/node_exporter/node_exporter", "--web.listen-address=:9109"]

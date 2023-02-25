@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+
+  # node bionic
+  node_bionic:
+    container_name: node_bionic
+    restart: unless-stopped
+    image: chephei/node_bionic:1.0
+    ports:
+      - "9110:9109"
+    networks:
+      - gb-devops-network
+
+  # node alpine
+  node_alpine:
+    container_name: node_alpine
+    restart: unless-stopped
+    image: chephei/node_alpine:1.0
+    ports:
+      - "9111:9109"
+    networks:
+      - gb-devops-network
